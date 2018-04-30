@@ -67,14 +67,14 @@ layout = html.Div([
 
 
     html.Div([
-        html.H1(children='Dashboard',
+        html.H1(children='Polarity',
             style={
             'textAlign': 'center',
             'color': colors['text']
         }),
 
     html.Div(children='''
-        всего твитов - ''' + str_len 
+        Number of tweets - ''' + str_len 
     ,
     
     style={
