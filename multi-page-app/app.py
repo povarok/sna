@@ -22,7 +22,6 @@ server = app.server
 app.config.supress_callback_exceptions = True
 
 external_css = [
-    '/static/base.css',
     'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
 ]
 for css in external_css:
