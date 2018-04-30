@@ -15,20 +15,22 @@ import pymongo
 from pymongo import MongoClient
 
 from flask import send_from_directory
-
+import flask
 
 app = dash.Dash()
 server = app.server
 app.config.supress_callback_exceptions = True
 
-external_css = [
-    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
-]
-for css in external_css:
-    app.css.append_css({"external_url": css})
+STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 
-@app.server.route('/static/<path:path>')
-def static_file(path):
-    static_folder = os.path.join(os.getcwd(), 'static')
-    return send_from_directory(static_folder, path)
+@app.server.route('/static/<resource>')
+def serve_static(resource):
+    return flask.send_from_directory(STATIC_PATH, resource)
+
+app.css.append_css({
+    'external_url': '/static/style.css',
+  
+})
+
+

@@ -1,0 +1,129 @@
+body,
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.rs-header {
+  position: relative;
+  min-height: 44px;
+  background-color: #2fb399;
+  border-bottom: 1px solid #e8edee;
+}
+
+.rs-sidebar-header {
+  position: absolute;
+  display: none;
+  z-index: 2;
+  background-color: #333;
+  color: #fff;
+  width: 100%;
+  height: calc(100vh - 44px);
+  border-right: 1px solid #e8edee;
+}
+
+.rs-sidebar-header.visible {
+  display: block;
+}
+
+@media only screen and (min-width: 768px) {
+  .rs-sidebar-header {
+    display: block;
+    float: left;
+    width: 90px;
+  }
+}
+
+@media only screen and (min-width: 1170px) {
+  .rs-sidebar-header {
+    display: block;
+    float: left;
+    width: 250px;
+  }
+}
+
+.rs-footer {
+  width: 100%;
+  min-height: 44px;
+  position: absolute;
+  background-color: #1da288;
+  border-top: 1px solid #e8edee;
+  bottom: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .rs-footer {
+    width: calc(100% - 90px);
+  }
+}
+
+@media only screen and (min-width: 1170px) {
+  .rs-footer {
+    width: calc(100% -);
+  }
+}
+
+.center-wrap-content {
+  text-align: center;
+}
+
+.main-content {
+  overflow: scroll;
+  height: calc(100vh - 44px);
+}
+
+@media only screen and (min-width: 768px) {
+  .main-content {
+    padding-left: 90px;
+  }
+}
+
+@media only screen and (min-width: 1170px) {
+  .main-content {
+    padding-left: 250px;
+  }
+}
+
+.mobile-nav {
+  float: right;
+  padding: 0 40px 0 0;
+  display: block;
+  height: 12px;
+  color: transparent;
+  position: relative;
+  width: 30px;
+  height: 34px;
+}
+
+.mobile-nav span,
+.mobile-nav span:before,
+.mobile-nav span:after {
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background-color: #333;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.mobile-nav span {
+  position: absolute;
+  top: 50%;
+}
+
+.mobile-nav span:before {
+  content: '';
+  top: -6px;
+}
+
+.mobile-nav span:after {
+  content: '';
+  top: 6px;
+}
+
+@media only screen and (min-width: 768px) {
+  .mobile-nav {
+    display: none;
+  }
+}

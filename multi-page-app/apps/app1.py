@@ -50,8 +50,14 @@ out = get_avg_polarity(db_request)
 colors = {'background': '#7FDBFF','text': '#7FDBFF'}
 
 layout = html.Div([
+    html.Div([
+        html.Div([
+            html.H1(children='Dashboard title'),
+        ], className='center-wrap-content'),
+    ],className='rs-header'),
 
-    html.Div( [
+    html.Div([
+        html.Div([
         html.H1(children='Plots'),
         html.Form(action='/apps/app1', children=
             [
@@ -61,7 +67,8 @@ layout = html.Div([
             [
                 html.Button('Second plot', className='btn btn-primary btn-lg'),
             ]),
-    ], className='col-sm-2'),
+        ], className='center-wrap-content'),
+    ], className='rs-sidebar-header'),
  
 
 
@@ -87,11 +94,18 @@ layout = html.Div([
             id='interval-component',
             interval=1*5000
         ),
-    ], className='col-sm-10')
+
+        
+        html.Div([
+            html.Div([
+                html.H3(children='Information here')
+            ], className='center-wrap-content'),
+        ], className='rs-footer'),
+    ], className='main-content')
 
   
     
-], className='row')
+])
 
 
 
