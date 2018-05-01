@@ -39,7 +39,7 @@ body,
   .rs-sidebar-header {
     display: block;
     float: left;
-    width: 15%;
+    width: 20%;
   }
 }
 
@@ -60,7 +60,7 @@ body,
 
 @media only screen and (min-width: 1170px) {
   .rs-footer {
-    width: 85%;
+    width: 79%;
   }
 }
 
@@ -71,17 +71,25 @@ body,
 .main-content {
   overflow: scroll;
   height: calc(100vh - 44px);
+  padding-left: 250px;
 }
 
 @media only screen and (min-width: 768px) {
   .main-content {
-    padding-left: 50px;
+    padding-left: 170px;
   }
 }
 
 @media only screen and (min-width: 1170px) {
   .main-content {
-    padding-left: 190px;
+    padding-left: 250px;
+  }
+}
+
+
+@media only screen and (min-width: 1920px) {
+  .main-content {
+    padding-left: 385px;
   }
 }
 
