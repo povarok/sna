@@ -18,7 +18,7 @@ body,
   z-index: 2;
   background-color: #333;
   color: #fff;
-  width: 100%;
+  width: 15%;
   height: calc(100vh - 44px);
   border-right: 1px solid #e8edee;
 }
@@ -31,7 +31,7 @@ body,
   .rs-sidebar-header {
     display: block;
     float: left;
-    width: 90px;
+    width: 15%;
   }
 }
 
@@ -39,12 +39,12 @@ body,
   .rs-sidebar-header {
     display: block;
     float: left;
-    width: 250px;
+    width: 15%;
   }
 }
 
 .rs-footer {
-  width: 100%;
+  width: 85%;
   min-height: 44px;
   position: absolute;
   background-color: #1da288;
@@ -54,13 +54,13 @@ body,
 
 @media only screen and (min-width: 768px) {
   .rs-footer {
-    width: calc(100% - 90px);
+    width: 85%;
   }
 }
 
 @media only screen and (min-width: 1170px) {
   .rs-footer {
-    width: calc(100% -);
+    width: 85%;
   }
 }
 
@@ -75,13 +75,13 @@ body,
 
 @media only screen and (min-width: 768px) {
   .main-content {
-    padding-left: 90px;
+    padding-left: 50px;
   }
 }
 
 @media only screen and (min-width: 1170px) {
   .main-content {
-    padding-left: 250px;
+    padding-left: 190px;
   }
 }
 

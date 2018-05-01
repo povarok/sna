@@ -22,6 +22,7 @@ from pymongo import MongoClient
 
 
 
+
 #------------------------ для графика со средними значениями полярности
 def get_avg_polarity(mongoArray):    
     avg_pol = {}
@@ -89,10 +90,12 @@ layout = html.Div([
             interval=1*5000
         ),
 
+        html.H1(children='Pie Chart example'),
+        dcc.Graph(id='pie-bar'),
         
         html.Div([
             html.Div([
-                html.H3(children='Information here')
+                html.H3(children='sentiment data analysis ® 2018')
             ], className='center-wrap-content'),
         ], className='rs-footer'),
     ], className='main-content')
@@ -139,6 +142,19 @@ def update_graph_bar():
 )
     return {'data': traces, 'layout': layout}
 
+
+
+@app.callback(Output('pie-bar', 'figure'),
+              events=[Event('interval-component', 'interval')])
+def update_pie_bar():
+    labels = ['Oxygen','Hydrogen','Carbon_Dioxide','Nitrogen']
+    values = [4500,2500,1053,500]
+
+    trace = plotly.graph_objs.Pie(labels=labels, values=values)
+    
+    layout = plotly.graph_objs.Layout(barmode='group')
+    
+    return {'data': [trace], 'layout': layout}
 
 
 

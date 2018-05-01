@@ -71,7 +71,7 @@ layout = html.Div([
 
         html.Div([
             html.Div([
-                html.H3(children='Information here')
+                html.H3(children='sentiment data analysis ® 2018')
             ], className='center-wrap-content'),
         ], className='rs-footer'),
         
