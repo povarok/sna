@@ -127,3 +127,21 @@ body,
     display: none;
   }
 }
+
+.btn-link {
+  width: 100%;
+  display: inline-block;
+  background-color: #f44336;
+  color: #FFFFFF;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 19px;
+  margin-left: 0;
+  opacity: 0.9;
+}
+
+a:hover{
+  background-color: #1da288;
+  color: #333;
+}

@@ -37,14 +37,9 @@ layout = html.Div([
     html.Div([
         html.Div([
         html.H1(children='Plots'),
-        html.Form(action='/apps/app1', children=
-            [
-                html.Button('Polarity', className='btn btn-primary btn-lg'),
-            ]),
-        html.Form(action='/apps/app2', children=
-            [
-                html.Button('Second plot', className='btn btn-primary btn-lg'),
-            ]),
+        html.A('Polarity', href='/apps/app1', className='btn-link'),
+        html.A('Second Plot', href='/apps/app2', className='btn-link'),
+        
         ], className='center-wrap-content'),
     ], className='rs-sidebar-header'),
  
