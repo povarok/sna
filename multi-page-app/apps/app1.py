@@ -24,14 +24,17 @@ from pymongo import MongoClient
 
 
 #------------------------ для графика со средними значениями полярности
+#----так как теперь в БД лежат все языки, а анализируем мы только рус/енг добавляется проверка на язык!
 def get_avg_polarity(mongoArray):    
     avg_pol = {}
     for i in mongoArray:
-        if i["date"] in avg_pol:
-            avg_pol[i["date"]].append(i["polarity"])
-        else:
-            avg_pol[i["date"]] = []
-            avg_pol[i["date"]].append(i["polarity"])
+        
+        if i['language']=='en' or i['language']=='ru':
+            if i["date"] in avg_pol:
+                avg_pol[i["date"]].append(i["polarity"])
+            else:
+                avg_pol[i["date"]] = []
+                avg_pol[i["date"]].append(i["polarity"])
 
     for key in avg_pol.keys():
         avg_pol[key] = np.mean(avg_pol[key])
