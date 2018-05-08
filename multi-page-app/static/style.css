@@ -9,7 +9,6 @@ body,
   position: relative;
   min-height: 44px;
   background-color: #2fb399;
-  border-bottom: 1px solid #e8edee;
 }
 
 .rs-sidebar-header {
@@ -20,7 +19,6 @@ body,
   color: #fff;
   width: 15%;
   height: calc(100vh - 44px);
-  border-right: 1px solid #e8edee;
 }
 
 .rs-sidebar-header.visible {
@@ -48,7 +46,6 @@ body,
   min-height: 44px;
   position: absolute;
   background-color: #1da288;
-  border-top: 1px solid #e8edee;
   bottom: 0;
 }
 
