@@ -1,14 +1,9 @@
-
-from dash.dependencies import Output, Event
-import dash_core_components as dcc
-import dash_html_components as html
-
-
 from app import app
 
-from dash.dependencies import Output, Event
+from dash.dependencies import Output, Event, Input, State
 import dash_core_components as dcc
 import dash_html_components as html
+
 from random import random
 import plotly
 from textblob import TextBlob
@@ -18,8 +13,9 @@ import re
 import numpy as np
 import pymongo
 from pymongo import MongoClient
-
-
+import json
+import dash
+import visdcc
 
 
 
@@ -52,16 +48,19 @@ def get_languages_ratio(mongoArray):
     return lang_ratio
         
 
-def get_db():
+def get_db(hashtag):
     
     client = pymongo.MongoClient("mongodb://povarok:EDCFVgb1@cluster0-shard-00-00-watg3.mongodb.net:27017,cluster0-shard-00-01-watg3.mongodb.net:27017,cluster0-shard-00-02-watg3.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
     db = client['productiondb']
-    db_request = db.fifa_russia.find()
+    db_request = db[hashtag].find()
     #str_len = str(len(list(db_request)))
     #print ("str_len не из update- " + str_len)
     #out = get_avg_polarity(db_request)
 
     return db_request
+
+
+
 
 
 
@@ -82,7 +81,7 @@ layout = html.Div([
         ], className='center-wrap-content'),
     ], className='rs-sidebar-header'),
  
-
+    html.Div(id='intermediate-value', style={'display': 'none'}),
 
 
     html.Div([
@@ -93,30 +92,37 @@ layout = html.Div([
         }),
 
     html.Div(children='''
-        Number of tweets - ''' + str(len(list(get_db()))),
+        Number of tweets - ''' + str(len(list(get_db("fifa2018_russia")))),
         id="num_tweets",
 
         style={
             'textAlign': 'center',
             'color': colors['text']
         }),
-
+        dcc.Dropdown(id='dropdown',
+            options=[
+                {'label': '#fifa2018 #russia', 'value': 'fifa2018_russia'},
+                {'label': '#fifa #world #cup #russia', 'value': 'fifa_world_cup_russia'}
+        ],
+        value='fifa2018_russia'),
         #dcc.Graph(id='live-update-graph-scatter', animate=True),
         dcc.Graph(id='live-update-graph-bar'),
         dcc.Interval(
             id='interval-component',
-            interval=1*7123
+            interval=1*60000
         ),
 
-        dcc.Interval(
-            id='interval-counter',
-            interval=1*10130
-        ),
+        
 
-        dcc.Interval(
-            id='interval-pie',
-            interval=1*4551
-        ),
+        # dcc.Interval(
+        #     id='interval-counter',
+        #     interval=1*10130
+        # ),
+
+        # dcc.Interval(
+        #     id='interval-pie',
+        #     interval=1*7500
+        # ),
 
         html.H1(children='Language percent',
             style={
@@ -125,6 +131,24 @@ layout = html.Div([
         }),
         dcc.Graph(id='pie-bar'),
         
+        html.Div([
+            visdcc.Network(id='net',
+                data={'nodes':[{'id': 1, 'label': 'Node 1', 'color':'#00ffff'},
+                    {'id': 2, 'label': 'Node 2'},
+                    {'id': 4, 'label': 'Node 4'},
+                    {'id': 5, 'label': 'Node 5'},
+                    {'id': 6, 'label': 'Node 6'}],
+                    'edges':[{'id':'1-3', 'from': 1, 'to': 3},
+                    {'id':'1-2', 'from': 1, 'to': 2}]
+                },
+                options=dict(height='600px', width='100%')),
+                dcc.RadioItems(id='color',
+                    options=[{'label': 'Red' , 'value': '#ff0000'},
+                    {'label': 'Green', 'value': '#00ff00'},
+                    {'label': 'Blue' , 'value': '#0000ff'}],
+                    value='Red')
+        ]),
+
         html.Div([
             html.Div([
                 html.H3(children='sentiment data analysis ® 2018')
@@ -137,10 +161,23 @@ layout = html.Div([
 ])
 
 
+@app.callback(Output('intermediate-value', 'children'), [Input('dropdown', 'value')],
+events=[Event('interval-component', 'interval')])
+def clean_data(hashtag):
+    table_data = get_db(hashtag)
 
-@app.callback(Output('live-update-graph-bar', 'figure'),
-              events=[Event('interval-component', 'interval')])
-def update_graph_bar():
+    table_data = list(table_data)
+
+    for el in table_data:
+        el.pop('_id')
+
+    print (type(table_data))
+     
+    return json.dumps(table_data) # or, more generally, json.dumps(cleaned_df)
+
+@app.callback(Output('live-update-graph-bar', 'figure'), [Input('intermediate-value', 'children')])
+             # events=[Event('interval-component', 'interval')])
+def update_graph_bar(table_data):
     
     
     # client = pymongo.MongoClient("mongodb://povarok:EDCFVgb1@cluster0-shard-00-00-watg3.mongodb.net:27017,cluster0-shard-00-01-watg3.mongodb.net:27017,cluster0-shard-00-02-watg3.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
@@ -150,7 +187,7 @@ def update_graph_bar():
     
     # db_request = db.fifa_russia.find()
     # print (len(list(db_request)))
-    out = get_avg_polarity(get_db())
+    out = get_avg_polarity(json.loads(table_data))
     
     traces = list()
     #str_len = len(list(db_request))
@@ -179,10 +216,14 @@ def update_graph_bar():
 
 
 
-@app.callback(Output('pie-bar', 'figure'),
-              events=[Event('interval-pie', 'interval')])
-def update_pie_bar():
-    out = get_languages_ratio(get_db())
+@app.callback(Output('pie-bar', 'figure'),[Input('intermediate-value', 'children')])
+            #  events=[Event('interval-pie', 'interval')])
+def update_pie_bar(table_data):
+
+    
+
+
+    out = get_languages_ratio(json.loads(table_data))
     labels = list(out.keys())
     values = list(out.values())
     print(labels)
@@ -196,13 +237,15 @@ def update_pie_bar():
 
 
 @app.callback(
-    Output(component_id='num_tweets', component_property='children'),
-     events=[Event('interval-counter', 'interval')])
-def update_output_div():
+    Output(component_id='num_tweets', component_property='children'),[Input('intermediate-value', 'children')])
+    # events=[Event('interval-counter', 'interval')])
+def update_output_div(table_data):
+    
     print("title upd")
-    string = "Number of tweets - " + str(len(list(get_db())))
+    string = "Number of tweets - " + str(len(list(json.loads(table_data))))
     #print (string)
     return string
 
-
-
+@app.callback(Output('net', 'options'),[Input('color', 'value')])
+def myfun(x):
+    return {'nodes':{'color': x}}
