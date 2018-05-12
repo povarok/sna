@@ -24,7 +24,8 @@ import visdcc
 def get_avg_polarity(mongoArray):    
     avg_pol = {}
     for i in mongoArray:
-        
+        if i['text'] == 'pop_words':
+            continue
         #if i['language']=='en' or i['language']=='ru':
         if i["date"] in avg_pol:
             avg_pol[i["date"]].append(i["polarity"])
@@ -41,6 +42,8 @@ def get_languages_ratio(mongoArray):
     lang_ratio = {}
 
     for i in mongoArray:
+        if i['text'] == 'pop_words':
+            continue
         if i["language"] in lang_ratio:
             lang_ratio[i["language"]] += 1
         else:
@@ -48,19 +51,35 @@ def get_languages_ratio(mongoArray):
     return lang_ratio
         
 
-def get_db(hashtag):
+def get_db(hashtag, request):
     
     client = pymongo.MongoClient("mongodb://povarok:EDCFVgb1@cluster0-shard-00-00-watg3.mongodb.net:27017,cluster0-shard-00-01-watg3.mongodb.net:27017,cluster0-shard-00-02-watg3.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
     db = client['productiondb']
-    db_request = db[hashtag].find()
+    db_request = db[hashtag].find(request)
     #str_len = str(len(list(db_request)))
     #print ("str_len не из update- " + str_len)
     #out = get_avg_polarity(db_request)
-
+    client.close()
     return db_request
 
 
-
+def get_network_data():
+    net_data = get_db('fifa2018_russia', {'text':'pop_words'}) 
+    net_data_keys = list(net_data[0]['named_entities'][0].keys())
+    #print(net_data_keys)
+    result = {}
+    nodes = []
+    colors = ['rgb(208, 89, 0)','rgb(208, 143, 0)','rgb(208, 207, 0)',
+    'rgb(0, 208, 43)','rgb(0, 223, 162)','rgb(20, 36, 123)',
+    'rgb(98, 0, 226)','rgb(180, 19, 223)','rgb(243, 21, 200)','rgb(152, 0, 0)']
+    id = 0
+    for el in net_data_keys:
+        nodes.append({'id':id, 'label': el, 'color': colors[id % 10]})
+        id += 1
+    result['nodes'] = nodes
+    result['edges'] = []
+    #print(result)
+    return result
 
 
 
@@ -92,7 +111,7 @@ layout = html.Div([
         }),
 
     html.Div(children='''
-        Number of tweets - ''' + str(len(list(get_db("fifa2018_russia")))),
+        Number of tweets - ''' + str(len(list(get_db("fifa2018_russia", {})))),
         id="num_tweets",
 
         style={
@@ -133,20 +152,15 @@ layout = html.Div([
         
         html.Div([
             visdcc.Network(id='net',
-                data={'nodes':[{'id': 1, 'label': 'Node 1', 'color':'#00ffff'},
-                    {'id': 2, 'label': 'Node 2'},
-                    {'id': 4, 'label': 'Node 4'},
-                    {'id': 5, 'label': 'Node 5'},
-                    {'id': 6, 'label': 'Node 6'}],
-                    'edges':[{'id':'1-3', 'from': 1, 'to': 3},
-                    {'id':'1-2', 'from': 1, 'to': 2}]
-                },
-                options=dict(height='600px', width='100%')),
-                dcc.RadioItems(id='color',
-                    options=[{'label': 'Red' , 'value': '#ff0000'},
-                    {'label': 'Green', 'value': '#00ff00'},
-                    {'label': 'Blue' , 'value': '#0000ff'}],
-                    value='Red')
+                data=get_network_data(),
+
+                options=dict(height='600px', width='100%'))
+
+                # dcc.RadioItems(id='color',
+                #     options=[{'label': 'Red' , 'value': '#ff0000'},
+                #     {'label': 'Green', 'value': '#00ff00'},
+                #     {'label': 'Blue' , 'value': '#0000ff'}],
+                #     value='Red')
         ]),
 
         html.Div([
@@ -164,7 +178,7 @@ layout = html.Div([
 @app.callback(Output('intermediate-value', 'children'), [Input('dropdown', 'value')],
 events=[Event('interval-component', 'interval')])
 def clean_data(hashtag):
-    table_data = get_db(hashtag)
+    table_data = get_db(hashtag, {})
 
     table_data = list(table_data)
 
