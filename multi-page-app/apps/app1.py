@@ -85,6 +85,9 @@ def get_network_data():
 
 colors = {'background': '#7FDBFF','text': '#7FDBFF'}
 
+
+f= open('fifa2018_russia.html','r')
+
 layout = html.Div([
     html.Div([
         html.Div([
@@ -131,17 +134,6 @@ layout = html.Div([
             interval=1*60000
         ),
 
-        
-
-        # dcc.Interval(
-        #     id='interval-counter',
-        #     interval=1*10130
-        # ),
-
-        # dcc.Interval(
-        #     id='interval-pie',
-        #     interval=1*7500
-        # ),
 
         html.H1(children='Language percent',
             style={
@@ -155,22 +147,14 @@ layout = html.Div([
                 data=get_network_data(),
 
                 options=dict(height='600px', width='100%'))
-
-                # dcc.RadioItems(id='color',
-                #     options=[{'label': 'Red' , 'value': '#ff0000'},
-                #     {'label': 'Green', 'value': '#00ff00'},
-                #     {'label': 'Blue' , 'value': '#0000ff'}],
-                #     value='Red')
         ]),
-
+        html.Iframe(srcDoc=f.read(),height="900",width="1300", id='iframe'),
         html.Div([
             html.Div([
                 html.H3(children='sentiment data analysis ® 2018')
             ], className='center-wrap-content'),
         ], className='rs-footer'),
     ], className='main-content')
-
-  
     
 ])
 
@@ -188,6 +172,12 @@ def clean_data(hashtag):
     print (type(table_data))
      
     return json.dumps(table_data) # or, more generally, json.dumps(cleaned_df)
+
+@app.callback(Output('iframe', 'srcDoc'), [Input('dropdown', 'value')])
+def change_iframe(value):
+    f= open(value+'.html','r')
+    name = f.read()
+    return name
 
 @app.callback(Output('live-update-graph-bar', 'figure'), [Input('intermediate-value', 'children')])
              # events=[Event('interval-component', 'interval')])
