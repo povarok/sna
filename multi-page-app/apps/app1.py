@@ -17,7 +17,9 @@ import json
 import dash
 import visdcc
 
-
+global client
+client = pymongo.MongoClient("mongodb://povarok:EDCFVgb1@cluster0-shard-00-00-watg3.mongodb.net:27017,cluster0-shard-00-01-watg3.mongodb.net:27017,cluster0-shard-00-02-watg3.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
+    
 
 #------------------------ для графика со средними значениями полярности
 #----так как теперь в БД лежат все языки, а анализируем мы только рус/енг добавляется проверка на язык!
@@ -53,12 +55,13 @@ def get_languages_ratio(mongoArray):
 
 def get_db(hashtag, request):
     
-    client = pymongo.MongoClient("mongodb://povarok:EDCFVgb1@cluster0-shard-00-00-watg3.mongodb.net:27017,cluster0-shard-00-01-watg3.mongodb.net:27017,cluster0-shard-00-02-watg3.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
+    #client = pymongo.MongoClient("mongodb://povarok:EDCFVgb1@cluster0-shard-00-00-watg3.mongodb.net:27017,cluster0-shard-00-01-watg3.mongodb.net:27017,cluster0-shard-00-02-watg3.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
     db = client['productiondb']
     db_request = db[hashtag].find(request)
     #str_len = str(len(list(db_request)))
     #print ("str_len не из update- " + str_len)
     #out = get_avg_polarity(db_request)
+    print('conn')
     client.close()
     return db_request
 
