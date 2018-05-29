@@ -89,7 +89,7 @@ def get_network_data():
 colors = {'background': '#7FDBFF','text': '#7FDBFF'}
 
 
-f= open('fifa2018_russia.html','r')
+f= open('./apps/fifa2018_russia.html','r')
 
 layout = html.Div([
     html.Div([
