@@ -62,6 +62,7 @@ def get_db(hashtag, request):
     #print ("str_len не из update- " + str_len)
     #out = get_avg_polarity(db_request)
     print('conn')
+    print (db_request)
     client.close()
     return db_request
 
@@ -73,7 +74,7 @@ def get_network_data():
     result = {}
     nodes = []
     colors = ['rgb(208, 89, 0)','rgb(208, 143, 0)','rgb(208, 207, 0)',
-    'rgb(0, 208, 43)','rgb(0, 223, 162)','rgb(20, 36, 123)',
+    'rgb(0, 208, 43)','rgb(0, 223, 162)','rgb(150, 36, 90)',
     'rgb(98, 0, 226)','rgb(180, 19, 223)','rgb(243, 21, 200)','rgb(152, 0, 0)']
     id = 0
     for el in net_data_keys:
@@ -89,7 +90,7 @@ def get_network_data():
 colors = {'background': '#7FDBFF','text': '#7FDBFF'}
 
 
-f= open('./apps/fifa2018_russia.html','r')
+f= open('C:/GitHub/sna/multi-page-app/fifa2018_russia.html','r')
 
 layout = html.Div([
     html.Div([
@@ -102,7 +103,7 @@ layout = html.Div([
         html.Div([
         html.H1(children='Plots'),
         html.A('Twitter', href='/apps/app1', className='btn-link'),
-        html.A('Second Plot', href='/apps/app2', className='btn-link'),
+        html.A('Streaming', href='/apps/app2', className='btn-link'),
         ], className='center-wrap-content'),
     ], className='rs-sidebar-header'),
  
@@ -146,10 +147,15 @@ layout = html.Div([
         dcc.Graph(id='pie-bar'),
         
         html.Div([
+            html.Hr(),
+            html.H2(children='Network',
+            style={
+            'textAlign': 'center'
+        }),
             visdcc.Network(id='net',
                 data=get_network_data(),
 
-                options=dict(height='600px', width='100%'))
+                options=dict(height='400px', width='100%'))
         ]),
         html.Iframe(srcDoc=f.read(),height="900",width="1300", id='iframe'),
         html.Div([
