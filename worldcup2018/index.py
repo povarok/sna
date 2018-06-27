@@ -1,4 +1,5 @@
 #вывод обработанного массива
+import math
 from textblob import TextBlob
 from textblob import Blobber
 from textblob.sentiments import NaiveBayesAnalyzer
@@ -15,7 +16,7 @@ from watson_developer_cloud.natural_language_understanding_v1 \
 
 #--------------!!!!!!!!!!!!!!!!!!!!-----------------
 #Изменить название файла для анализа!!!!!!!!!!!!
-filename = "fifa_world_cup_russia.csv"
+filename = "FIFA2018 06-01 06-16.csv"
 #Requirements for Watson
 
 natural_language_understanding = NaturalLanguageUnderstandingV1(
@@ -27,7 +28,7 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(
 def keywords(text):
     json_output = natural_language_understanding.analyze(
     text=text,
-    url='"https://gateway.watsonplatform.net/natural-language-understanding/api',
+    url='https://gateway.watsonplatform.net/natural-language-understanding/api',
     features=Features(
     keywords=KeywordsOptions(
       sentiment=True,
@@ -45,12 +46,18 @@ def csv_parser(filename):
     for index in df.index:
         
         Dict={}
-        excess= re.search('[\S]*.[a-z]{0,6}/[\S]*',df['text'][index])
+        print(df['text'][index])
+        
+        try:
+
+            excess= re.search('[\S]*.[a-z]{0,6}/[\S]*',df['text'][index])
+        except Exception:
+            pass
         if excess != None:
             new_text=df['text'][index].replace(excess.group(),'')
         else:
             new_text=df['text'][index]
-        new_text=new_text.lower()
+        new_text=str(new_text).lower()
         Dict['text']= new_text
         Dict['date']=df['date'][index].split(' ')[0]
         Dict['language']=df['language'][index]
@@ -105,7 +112,7 @@ result_array=(text_analysis(csv_parser(filename)))
 client = pymongo.MongoClient("mongodb://admin:1234@cluster0-shard-00-00-ccstx.mongodb.net:27017,cluster0-shard-00-01-ccstx.mongodb.net:27017,cluster0-shard-00-02-ccstx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true")
 #-----------------!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------
 #Изменить название таблицы для другого хештега!!!!!!!!!!!!!    
-db = client['worldcup2018_test']
-db.fifa2018_russia.insert_many(result_array)
+db = client['worldcup2018_release']
+db.fifa2018.insert_many(result_array)
 #-----------------!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------
 
