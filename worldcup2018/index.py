@@ -16,7 +16,7 @@ from watson_developer_cloud.natural_language_understanding_v1 \
 
 #--------------!!!!!!!!!!!!!!!!!!!!-----------------
 #Изменить название файла для анализа!!!!!!!!!!!!
-filename = "FIFA2018 06-01 06-16.csv"
+filename = "FIFA2018 06-17 06-19.csv"
 #Requirements for Watson
 
 natural_language_understanding = NaturalLanguageUnderstandingV1(
