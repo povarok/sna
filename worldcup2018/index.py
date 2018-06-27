@@ -13,19 +13,21 @@ from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 \
   import Features, KeywordsOptions
 
-
+#--------------!!!!!!!!!!!!!!!!!!!!-----------------
+#Изменить название файла для анализа!!!!!!!!!!!!
 filename = "fifa_world_cup_russia.csv"
 #Requirements for Watson
 
 natural_language_understanding = NaturalLanguageUnderstandingV1(
-  username='a6a6b0d5-370e-42b1-8391-97f12a99fb19',
-  password='tK7MknYJsSGI',
+  username='0762c16a-d667-4c63-95db-b0ccf162e49c',
+  password='iGIqX7Aylphr',
   version='2018-03-16')
 
 
 def keywords(text):
     json_output = natural_language_understanding.analyze(
     text=text,
+    url='"https://gateway.watsonplatform.net/natural-language-understanding/api',
     features=Features(
     keywords=KeywordsOptions(
       sentiment=True,
@@ -100,9 +102,10 @@ def text_analysis (array):
     
 result_array=(text_analysis(csv_parser(filename)))  
 
-
-client = pymongo.MongoClient("mongodb://povarok:EDCFVgb1@cluster0-shard-00-00-watg3.mongodb.net:27017,cluster0-shard-00-01-watg3.mongodb.net:27017,cluster0-shard-00-02-watg3.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
-    
+client = pymongo.MongoClient("mongodb://admin:1234@cluster0-shard-00-00-ccstx.mongodb.net:27017,cluster0-shard-00-01-ccstx.mongodb.net:27017,cluster0-shard-00-02-ccstx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true")
+#-----------------!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------
+#Изменить название таблицы для другого хештега!!!!!!!!!!!!!    
 db = client['worldcup2018_test']
 db.fifa2018_russia.insert_many(result_array)
+#-----------------!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------
 

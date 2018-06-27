@@ -38,7 +38,11 @@ class TweetManager:
 				
 				usernameTweet = tweetPQ("span.username.js-action-profile-name b").text()
 				txt = re.sub(r"\s+", " ", tweetPQ("p.js-tweet-text").text().replace('# ', '#').replace('@ ', '@').replace(';', '.'))
-				retweets = int(tweetPQ("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replace(",", ""))
+				try:
+					retweets = int(tweetPQ("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr("data-tweet-stat-count"))
+				except Exception:
+					retweets = 0
+					
 				favorites = int(tweetPQ("span.ProfileTweet-action--favorite span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replace(",", ""))
 				dateSec = int(tweetPQ("small.time span.js-short-timestamp").attr("data-time"))
 				id = tweetPQ.attr("data-tweet-id")
@@ -58,7 +62,10 @@ class TweetManager:
 				tweet.id = id
 				tweet.permalink = 'https://twitter.com' + permalink
 				tweet.username = usernameTweet
-				tweet.lang = detect(txt)
+				try:
+					tweet.lang = detect(txt)
+				except Exception:
+					tweet.lang = "null"
 				tweet.text = txt
 				tweet.date = datetime.datetime.fromtimestamp(dateSec)
 				tweet.formatted_date = datetime.datetime.fromtimestamp(dateSec).strftime("%a %b %d %X +0000 %Y")
