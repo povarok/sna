@@ -1,4 +1,4 @@
-#вывод обработанного массива
+#
 import math
 from textblob import TextBlob
 from textblob import Blobber
@@ -16,19 +16,20 @@ from watson_developer_cloud.natural_language_understanding_v1 \
 
 #--------------!!!!!!!!!!!!!!!!!!!!-----------------
 #Изменить название файла для анализа!!!!!!!!!!!!
-filename = "FIFA2018 06-17 06-19.csv"
+filename = "mundial.csv"
 #Requirements for Watson
 
 natural_language_understanding = NaturalLanguageUnderstandingV1(
   username='0762c16a-d667-4c63-95db-b0ccf162e49c',
   password='iGIqX7Aylphr',
+  url='https://gateway.watsonplatform.net/natural-language-understanding/api',
   version='2018-03-16')
 
 
 def keywords(text):
     json_output = natural_language_understanding.analyze(
     text=text,
-    url='https://gateway.watsonplatform.net/natural-language-understanding/api',
+    # url='https://gateway.watsonplatform.net/natural-language-understanding/api',
     features=Features(
     keywords=KeywordsOptions(
       sentiment=True,
@@ -54,7 +55,11 @@ def csv_parser(filename):
         except Exception:
             pass
         if excess != None:
-            new_text=df['text'][index].replace(excess.group(),'')
+            print('excess = ', excess)
+            try:
+                new_text=df['text'][index].replace(excess.group(),'')
+            except Exception:
+                pass
         else:
             new_text=df['text'][index]
         new_text=str(new_text).lower()
@@ -84,7 +89,6 @@ def named_entities(text):
     return named_entities
     
 
-
 # метод обработки массива твитов
 def text_analysis (array):
     result = []
@@ -95,14 +99,19 @@ def text_analysis (array):
         #print ('twit["polarity"]' + str(twit["polarity"]))
         tweet["noun_phrases"] = TextBlob(tweet["text"]).noun_phrases  # непонятно что это.  .. , но тоже добавляем
         tweet["named_entities"] = named_entities(tweet["text"])
-
+        print('Processing: ', len(result), '/', len(array))
         try:
-            print ('tweet[text]' + tweet['text'])
+            print ('try')
             tweet_keyword = keywords(tweet['text'])
             tweet_keyword = tweet_keyword['keywords']
             tweet["keywords"] = tweet_keyword
-        except:
+
+            print (tweet_keyword)
+        except Exception:
+            print('catch')
             pass
+        # tweet_keyword = keywords(tweet['text'])
+        # tweet["keywords"] = tweet_keyword
         result.append(tweet)
     return result
     
@@ -113,6 +122,6 @@ client = pymongo.MongoClient("mongodb://admin:1234@cluster0-shard-00-00-ccstx.mo
 #-----------------!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------
 #Изменить название таблицы для другого хештега!!!!!!!!!!!!!    
 db = client['worldcup2018_release']
-db.fifa2018.insert_many(result_array)
+db.mundial_with_keywords.insert_many(result_array)
 #-----------------!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------
 
