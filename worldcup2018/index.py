@@ -16,12 +16,12 @@ from watson_developer_cloud.natural_language_understanding_v1 \
 
 #--------------!!!!!!!!!!!!!!!!!!!!-----------------
 #Изменить название файла для анализа!!!!!!!!!!!!
-filename = "mun.csv"
+filename = "worldcup2018.csv"
 #Requirements for Watson
 
 natural_language_understanding = NaturalLanguageUnderstandingV1(
-  username='0762c16a-d667-4c63-95db-b0ccf162e49c',
-  password='iGIqX7Aylphr',
+  username='1417e540-3656-43f9-9a0a-f9edc30008f5',
+  password='paARPZzPKDxU',
   url='https://gateway.watsonplatform.net/natural-language-understanding/api',
   version='2018-03-16')
 
@@ -101,7 +101,6 @@ def text_analysis (array):
         tweet["named_entities"] = named_entities(tweet["text"])
         print('Processing: ', len(result), '/', len(array))
         try:
-            print ('try')
             tweet_keyword = keywords(tweet['text'])
             tweet_keyword = tweet_keyword['keywords']
             tweet["keywords"] = tweet_keyword
@@ -122,6 +121,6 @@ client = pymongo.MongoClient("mongodb://admin:1234@cluster0-shard-00-00-ccstx.mo
 #-----------------!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------
 #Изменить название таблицы для другого хештега!!!!!!!!!!!!!    
 db = client['worldcup2018_release']
-db.mundial_with_keywords.insert_many(result_array)
+db.worldcup2018_with_keywords.insert_many(result_array)
 #-----------------!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------
 
