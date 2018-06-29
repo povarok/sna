@@ -16,7 +16,7 @@ from watson_developer_cloud.natural_language_understanding_v1 \
 
 #--------------!!!!!!!!!!!!!!!!!!!!-----------------
 #Изменить название файла для анализа!!!!!!!!!!!!
-filename = "mundial.csv"
+filename = "mun.csv"
 #Requirements for Watson
 
 natural_language_understanding = NaturalLanguageUnderstandingV1(
